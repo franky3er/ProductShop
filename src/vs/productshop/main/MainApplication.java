@@ -71,7 +71,7 @@ public class MainApplication {
     }
 
     private static void initialize() throws ClassNotFoundException, SQLException, TTransportException {
-        shopHandler = new ShopHandler();
+        shopHandler = new ShopHandler(connection);
         processor = new ShopService.Processor(shopHandler);
         initializeSQLiteConnection();
         initializeServer();
