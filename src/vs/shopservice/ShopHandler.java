@@ -16,19 +16,47 @@ public class ShopHandler implements ShopService.Iface {
     }
 
     @Override
-    public void ping() throws TException {}
+    public void ping() throws TException {
+    }
 
     @Override
     public long fetchProductPrice(String productName, String productAmount) throws TException {
+        System.out.println(String.format("INFO : Fetch product price : ProductName: %s, Amount: %s", productName, productAmount));
         ProductStockRecord productStockRecord = productStockDBHandler.getProductStockRecord(productName);
-        //TODO handle
+        if (productStockRecord == null) {
+            System.err.println(String.format("WARNING : %s does not exist in db"));
+            return -1;
+        }
+        try {
+            return calculateTotalPrice(productStockRecord.getProductPricePerUnit(), productAmount);
+        } catch (NumberFormatException e) {
+            System.err.println(String.format("WARNING : incorrect amount format: %s", productAmount));
+            e.printStackTrace();
+            return -1;
+        }
 
-        return 0;
     }
 
     @Override
     public boolean buyProduct(String productName, String productAmount) throws TException {
-        boolean successful = productStockDBHandler.reduceProducStockAmmount(productName, productAmount);
-        return successful;
+        System.out.println(String.format("INFO : Buy Product : ProductName: %s, Amount: %s", productName, productAmount));
+        return productStockDBHandler.reduceProductStockAmount(productName, productAmount);
+    }
+
+    private long calculateTotalPrice(long unitPrice, String amount) throws NumberFormatException {
+        System.out.println(String.format("INFO : Calculate Price : UnitPrice: %d, Amount: %s", unitPrice, amount));
+        if (amount.contains(".")) {
+            return calculateTotalPrice(unitPrice, Double.parseDouble(amount));
+        } else {
+            return calculateTotalPrice(unitPrice, Integer.parseInt(amount));
+        }
+    }
+
+    private long calculateTotalPrice(long unitPrice, int amount) {
+        return unitPrice * amount;
+    }
+
+    private long calculateTotalPrice(long unitPrice, double amount) {
+        return (long) (unitPrice * amount);
     }
 }
