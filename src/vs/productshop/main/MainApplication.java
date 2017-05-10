@@ -1,20 +1,16 @@
 package vs.productshop.main;
 
 import org.apache.thrift.server.TServer;
-import org.apache.thrift.server.TServer.Args;
-import org.apache.thrift.server.TSimpleServer;
 import org.apache.thrift.server.TThreadPoolServer;
-import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
-import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 
 import org.apache.thrift.transport.TTransportException;
+import vs.db.handler.ProductStockDBHandler;
 import vs.shopservice.ShopHandler;
 import vs.shopservice.ShopService;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -42,6 +38,7 @@ public class MainApplication {
     private static String sqLiteDriver;
     private static ShopHandler shopHandler;
     private static ShopService.Processor processor;
+    private static ProductStockDBHandler productStockDBHandler;
     private static Connection connection;
     private static TServerTransport serverTransport;
     private static TServer server;
@@ -71,7 +68,7 @@ public class MainApplication {
     }
 
     private static void initialize() throws ClassNotFoundException, SQLException, TTransportException {
-        shopHandler = new ShopHandler(connection);
+        shopHandler = new ShopHandler(new ProductStockDBHandler(connection));
         processor = new ShopService.Processor(shopHandler);
         initializeSQLiteConnection();
         initializeServer();
