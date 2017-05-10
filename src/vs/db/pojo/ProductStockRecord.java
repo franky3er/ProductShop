@@ -6,7 +6,7 @@ package vs.db.pojo;
 public class ProductStockRecord {
     private String productName;
     private String productUnit;
-    private String productPricePerUnit;
+    private long productPricePerUnit;
     private String productAmmount;
 
     public String getProductName() {
@@ -25,11 +25,11 @@ public class ProductStockRecord {
         this.productUnit = productUnit;
     }
 
-    public String getProductPricePerUnit() {
+    public long getProductPricePerUnit() {
         return productPricePerUnit;
     }
 
-    public void setProductPricePerUnit(String productPricePerUnit) {
+    public void setProductPricePerUnit(long productPricePerUnit) {
         this.productPricePerUnit = productPricePerUnit;
     }
 
