@@ -33,7 +33,9 @@ public class ProductStockDBHandler {
                 productStockRecord.setProductAmmount(resultSet.getString("Amount"));
             }
         } catch (SQLException e) {
+            System.err.println(String.format("WARNING : ExecuteQuery failed"));
             e.printStackTrace();
+            return null;
         }
         return productStockRecord;
     }
