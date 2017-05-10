@@ -21,6 +21,7 @@ public class ShopHandler implements ShopService.Iface {
 
     @Override
     public long fetchProductPrice(String productName, String productAmount) throws TException {
+        System.out.println(String.format("INFO : Fetch product price : ProductName: %s, Amount: %s", productName, productAmount));
         ProductStockRecord productStockRecord = productStockDBHandler.getProductStockRecord(productName);
         if (productStockRecord == null) {
             System.err.println(String.format("WARNING : %s does not exist in db"));
@@ -38,10 +39,12 @@ public class ShopHandler implements ShopService.Iface {
 
     @Override
     public boolean buyProduct(String productName, String productAmount) throws TException {
+        System.out.println(String.format("INFO : Buy Product : ProductName: %s, Amount: %s", productName, productAmount));
         return productStockDBHandler.reduceProductStockAmount(productName, productAmount);
     }
 
     private long calculateTotalPrice(long unitPrice, String amount) throws NumberFormatException {
+        System.out.println(String.format("INFO : Calculate Price : UnitPrice: %d, Amount: %s", unitPrice, amount));
         if (amount.contains(".")) {
             return calculateTotalPrice(unitPrice, Double.parseDouble(amount));
         } else {

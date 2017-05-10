@@ -90,11 +90,11 @@ public class MainApplication {
     private static void initializeSQLiteConnection() throws ClassNotFoundException, SQLException {
         System.out.println("INFO : Initializing SQLite Connection");
         Class.forName(sqLiteDriver);
-        connection = DriverManager.getConnection(sqLiteFileSource);
+        connection = DriverManager.getConnection("jdbc:sqlite:" + sqLiteFileSource);
     }
 
     private static void initializeServer() throws TTransportException {
-        System.out.println(String.format("INFO : Initializing Server: Port: ", port));
+        System.out.println(String.format("INFO : Initializing Server: Port: %s", port));
         serverTransport = new TServerSocket(port);
         server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
     }
