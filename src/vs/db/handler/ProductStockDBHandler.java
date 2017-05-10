@@ -37,7 +37,7 @@ public class ProductStockDBHandler {
         return productStockRecord;
     }
 
-    public boolean reduceProducStockAmount(String productName, String productAmount) {
+    public boolean reduceProductStockAmount(String productName, String productAmount) {
         ProductStockRecord productStockRecord = getProductStockRecord(productAmount);
         if (productStockRecord == null) {
             System.err.println(String.format("WARNING : Product %s not found", productName));
@@ -64,7 +64,7 @@ public class ProductStockDBHandler {
         }
     }
 
-    private String calculateNewProductStockAmount(String productAmount, String productStockAmount) {
+    private String calculateNewProductStockAmount(String productAmount, String productStockAmount) throws NumberFormatException {
         if (productAmount.contains(".") && productStockAmount.contains(".")) { // is Double
             return calculateNewProductStockAmount(Double.parseDouble(productAmount), Double.parseDouble(productStockAmount));
         }

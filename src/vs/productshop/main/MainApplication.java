@@ -56,10 +56,20 @@ public class MainApplication {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    System.err.println("ERROR : Failed to close DB Connection");
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     private static void loadConfig() throws IOException {
+        System.out.println("INFO : Loading config...");
         Properties properties = new Properties();
         properties.load(new FileReader(PROJECT_CONFIG));
         port = Integer.parseInt(properties.getProperty(PRODUCTSHOP_LISTENING_PORT));
@@ -68,24 +78,29 @@ public class MainApplication {
     }
 
     private static void initialize() throws ClassNotFoundException, SQLException, TTransportException {
-        shopHandler = new ShopHandler(new ProductStockDBHandler(connection));
-        processor = new ShopService.Processor(shopHandler);
+        System.out.println("INFO : Initializing");
         initializeSQLiteConnection();
+        System.out.println("INFO : Initializing ShopHandler");
+        shopHandler = new ShopHandler(new ProductStockDBHandler(connection));
+        System.out.println("INFO : Initializing Processor");
+        processor = new ShopService.Processor(shopHandler);
         initializeServer();
-
     }
 
     private static void initializeSQLiteConnection() throws ClassNotFoundException, SQLException {
+        System.out.println("INFO : Initializing SQLite Connection");
         Class.forName(sqLiteDriver);
         connection = DriverManager.getConnection(sqLiteFileSource);
     }
 
     private static void initializeServer() throws TTransportException {
+        System.out.println(String.format("INFO : Initializing Server: Port: ", port));
         serverTransport = new TServerSocket(port);
         server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
     }
 
     private static void run() {
+        System.out.println("INFO : run application");
         server.serve();
     }
 
