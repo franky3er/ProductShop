@@ -95,25 +95,15 @@ public class MainApplication {
 
     private static void run() {
         System.out.println("INFO : run application");
-        Runnable runServer = new Runnable() {
-            public void run() {
-                runServer();
-            }
-        };
-        new Thread(runServer).start();
-    }
-
-    private static void runServer() {
         try {
+            System.out.println("INFO : Starting the Server on Port: " + port);
             serverTransport = new TServerSocket(port);
             server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
-            System.out.println("INFO : Starting the Server on Port: " + port);
             server.serve();
         } catch (TTransportException e) {
             System.err.println("ERROR : run failed");
             e.printStackTrace();
         }
-
     }
 
 }

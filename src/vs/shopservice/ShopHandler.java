@@ -24,7 +24,7 @@ public class ShopHandler implements ShopService.Iface {
         System.out.println(String.format("INFO : Fetch product price : ProductName: %s, Amount: %s", productName, productAmount));
         ProductStockRecord productStockRecord = productStockDBHandler.getProductStockRecord(productName);
         if (productStockRecord == null) {
-            System.err.println(String.format("WARNING : %s does not exist in db"));
+            System.err.println(String.format("WARNING : %s does not exist in db", productName));
             return -1;
         }
         try {
