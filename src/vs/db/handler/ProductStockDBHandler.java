@@ -19,11 +19,11 @@ public class ProductStockDBHandler {
 
     public ProductStockRecord getProductStockRecord(String productName) {
         ProductStockRecord productStockRecord = null;
-        String sqlStatement = "SELECT * FROM ProductStock WHERE Name = '?';";
+        String sqlStatement = "SELECT * FROM ProductStock WHERE Name = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, productName);
-            System.out.println(String.format("INFO : ExecuteQuery: %s", preparedStatement.toString()));
+            System.out.println(String.format("INFO : ExecuteQuery: %s", preparedStatement));
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 productStockRecord = new ProductStockRecord();
@@ -47,12 +47,14 @@ public class ProductStockDBHandler {
             return false;
         }
         String newProductStockAmount = null;
-        String sqlStatement = "UPDATE ProductStock SET Amount = '?' WHERE Name = '?';";
+        String sqlStatement = "UPDATE ProductStock SET Amount = ? WHERE Name = ?;";
         try {
             newProductStockAmount = calculateNewProductStockAmount(productAmount, productStockRecord.getProductAmmount());
             if (newProductStockAmount == null) return false;
             PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
-            System.out.println(String.format("INFO : Execute Update: %s", preparedStatement.toString()));
+            preparedStatement.setString(1, productAmount);
+            preparedStatement.setString(2, productName);
+            System.out.println(String.format("INFO : Execute Update: %s", preparedStatement));
             preparedStatement.executeUpdate();
             return true;
         } catch (NumberFormatException e) {

@@ -1,5 +1,6 @@
 package vs.productshop.main;
 
+import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
@@ -84,7 +85,6 @@ public class MainApplication {
         shopHandler = new ShopHandler(new ProductStockDBHandler(connection));
         System.out.println("INFO : Initializing Processor");
         processor = new ShopService.Processor(shopHandler);
-        initializeServer();
     }
 
     private static void initializeSQLiteConnection() throws ClassNotFoundException, SQLException {
@@ -93,15 +93,27 @@ public class MainApplication {
         connection = DriverManager.getConnection("jdbc:sqlite:" + sqLiteFileSource);
     }
 
-    private static void initializeServer() throws TTransportException {
-        System.out.println(String.format("INFO : Initializing Server: Port: %s", port));
-        serverTransport = new TServerSocket(port);
-        server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
-    }
-
     private static void run() {
         System.out.println("INFO : run application");
-        server.serve();
+        Runnable runServer = new Runnable() {
+            public void run() {
+                runServer();
+            }
+        };
+        new Thread(runServer).start();
+    }
+
+    private static void runServer() {
+        try {
+            serverTransport = new TServerSocket(port);
+            server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
+            System.out.println("INFO : Starting the Server on Port: " + port);
+            server.serve();
+        } catch (TTransportException e) {
+            System.err.println("ERROR : run failed");
+            e.printStackTrace();
+        }
+
     }
 
 }
