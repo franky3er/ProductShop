@@ -1,4 +1,4 @@
-package vs.db.pojo;
+package vs.products.shop.db.pojo;
 
 /**
  * Created by franky3er on 10.05.17.

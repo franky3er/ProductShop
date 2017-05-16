@@ -1,8 +1,8 @@
 package vs.shopservice;
 
 import org.apache.thrift.TException;
-import vs.db.handler.ProductStockDBHandler;
-import vs.db.pojo.ProductStockRecord;
+import vs.products.shop.db.handler.ProductStockDBHandler;
+import vs.products.shop.db.pojo.ProductStockRecord;
 
 /**
  * Created by franky3er on 09.05.17.

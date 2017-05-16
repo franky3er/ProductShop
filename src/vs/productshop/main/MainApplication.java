@@ -1,13 +1,12 @@
 package vs.productshop.main;
 
-import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 
 import org.apache.thrift.transport.TTransportException;
-import vs.db.handler.ProductStockDBHandler;
+import vs.products.shop.db.handler.ProductStockDBHandler;
 import vs.shopservice.ShopHandler;
 import vs.shopservice.ShopService;
 
