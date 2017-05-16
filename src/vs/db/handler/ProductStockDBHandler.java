@@ -41,7 +41,7 @@ public class ProductStockDBHandler {
     }
 
     public boolean reduceProductStockAmount(String productName, String productAmount) {
-        ProductStockRecord productStockRecord = getProductStockRecord(productAmount);
+        ProductStockRecord productStockRecord = getProductStockRecord(productName);
         if (productStockRecord == null) {
             System.err.println(String.format("WARNING : Product %s not found", productName));
             return false;
@@ -52,7 +52,7 @@ public class ProductStockDBHandler {
             newProductStockAmount = calculateNewProductStockAmount(productAmount, productStockRecord.getProductAmmount());
             if (newProductStockAmount == null) return false;
             PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, productAmount);
+            preparedStatement.setString(1, newProductStockAmount);
             preparedStatement.setString(2, productName);
             System.out.println(String.format("INFO : Execute Update: %s", preparedStatement));
             preparedStatement.executeUpdate();
