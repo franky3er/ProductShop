@@ -7,6 +7,7 @@ import org.apache.thrift.transport.TServerTransport;
 
 import org.apache.thrift.transport.TTransportException;
 import vs.products.shop.db.handler.ProductStockDBHandler;
+import vs.products.shop.delivery.kalmund.KalmundDelivery;
 import vs.shopservice.ShopHandler;
 import vs.shopservice.ShopService;
 
@@ -31,14 +32,14 @@ public class MainApplication {
     private final static String PRODUCTSHOP_PRODUCTSQLITE_FILESOURCE = "ProductShop.ProductSQLiteHandler.FileSource";
     private final static String PRODUCTSHOP_PRODUCTSQLITE_DRIVER = "ProductShop.ProductSQLiteHandler.Driver";
     private final static String PRODUCTSHOP_LISTENING_PORT = "ProductShop.Listening.Port";
-
+    private final static String PRODUCTSHOP_DELIVERY_DIRECTORY = "ProductShop.Delivery.Directory";
 
     private static int port;
     private static String sqLiteFileSource;
     private static String sqLiteDriver;
+    private static String deliveryDirectory;
     private static ShopHandler shopHandler;
     private static ShopService.Processor processor;
-    private static ProductStockDBHandler productStockDBHandler;
     private static Connection connection;
     private static TServerTransport serverTransport;
     private static TServer server;
@@ -75,13 +76,15 @@ public class MainApplication {
         port = Integer.parseInt(properties.getProperty(PRODUCTSHOP_LISTENING_PORT));
         sqLiteFileSource = properties.getProperty(PRODUCTSHOP_PRODUCTSQLITE_FILESOURCE);
         sqLiteDriver = properties.getProperty(PRODUCTSHOP_PRODUCTSQLITE_DRIVER);
+        deliveryDirectory = properties.getProperty(PRODUCTSHOP_DELIVERY_DIRECTORY);
     }
 
     private static void initialize() throws ClassNotFoundException, SQLException, TTransportException {
         System.out.println("INFO : Initializing");
         initializeSQLiteConnection();
         System.out.println("INFO : Initializing ShopHandler");
-        shopHandler = new ShopHandler(new ProductStockDBHandler(connection));
+        shopHandler = new ShopHandler(new ProductStockDBHandler(connection),
+                new KalmundDelivery(deliveryDirectory));
         System.out.println("INFO : Initializing Processor");
         processor = new ShopService.Processor(shopHandler);
     }

@@ -33,7 +33,7 @@ public class KalmundDelivery implements DeliveryOption {
                 deliveryAddress,
                 productName,
                 productAmount);
-        return deliveryAddress;
+        return deliveryFileContent;
     }
 
     private String createDeliveryAbsolutFilePath() {

@@ -3,6 +3,7 @@ package vs.shopservice;
 import org.apache.thrift.TException;
 import vs.products.shop.db.handler.ProductStockDBHandler;
 import vs.products.shop.db.pojo.ProductStockRecord;
+import vs.products.shop.delivery.DeliveryOption;
 
 /**
  * Created by franky3er on 09.05.17.
@@ -10,9 +11,11 @@ import vs.products.shop.db.pojo.ProductStockRecord;
 public class ShopHandler implements ShopService.Iface {
 
     private ProductStockDBHandler productStockDBHandler;
+    private DeliveryOption deliveryOption;
 
-    public ShopHandler(ProductStockDBHandler productStockDBHandler) {
+    public ShopHandler(ProductStockDBHandler productStockDBHandler, DeliveryOption deliveryOption) {
         this.productStockDBHandler = productStockDBHandler;
+        this.deliveryOption = deliveryOption;
     }
 
     @Override
@@ -40,7 +43,12 @@ public class ShopHandler implements ShopService.Iface {
     @Override
     public boolean buyProduct(String productName, String productAmount, String deliveryAddress) throws TException {
         System.out.println(String.format("INFO : Buy Product : ProductName: %s, Amount: %s", productName, productAmount));
-        return productStockDBHandler.reduceProductStockAmount(productName, productAmount);
+        boolean buySuccessful = productStockDBHandler.reduceProductStockAmount(productName, productAmount);
+        if(!buySuccessful) {
+            return false;
+        }
+        deliveryOption.deliver(productName, productAmount, deliveryAddress);
+        return true;
     }
 
     private long calculateTotalPrice(long unitPrice, String amount) throws NumberFormatException {
