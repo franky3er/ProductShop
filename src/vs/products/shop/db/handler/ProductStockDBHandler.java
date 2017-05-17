@@ -1,6 +1,6 @@
-package vs.db.handler;
+package vs.products.shop.db.handler;
 
-import vs.db.pojo.ProductStockRecord;
+import vs.products.shop.db.pojo.ProductStockRecord;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
