@@ -8,7 +8,7 @@ import vs.products.shop.delivery.DeliveryOption;
 public class KalmundDelivery implements DeliveryOption {
 
     @Override
-    public void deliver(String productName, String productAmount) {
-        //TODO send the delivery to SilviDelivery application via RPC
+    public void deliver(String productName, String productAmount, String deliveryAddress) {
+
     }
 }

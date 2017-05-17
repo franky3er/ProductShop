@@ -38,7 +38,7 @@ public class ShopHandler implements ShopService.Iface {
     }
 
     @Override
-    public boolean buyProduct(String productName, String productAmount) throws TException {
+    public boolean buyProduct(String productName, String productAmount, String deliveryAddress) throws TException {
         System.out.println(String.format("INFO : Buy Product : ProductName: %s, Amount: %s", productName, productAmount));
         return productStockDBHandler.reduceProductStockAmount(productName, productAmount);
     }
